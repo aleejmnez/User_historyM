@@ -6,8 +6,8 @@ def add_product(inventory):
     
     while not validate_product_name_unique(name_product, inventory):
         print(f"ERROR: Product '{name_product}' already exists in the inventory. Please enter a different product name.")
-        name_product = validate_input_product_name()
-    
+        
+    name_product = validate_input_product_name()
     price = validate_input_price()
     quantity = validate_input_quantity()
 
