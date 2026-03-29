@@ -62,43 +62,15 @@ def validate_input_price():
                    
 
 def validate_input_quantity():
-    try:
-        quantity = int(input("Enter the quantity sold: "))
-        if quantity <= 0:
-            print("ERROR: Quantity must be positive and non-zero. Please enter a valid quantity.")
-            return validate_input_quantity()
-        else:
-            return quantity
-    except ValueError:
-        print("ERROR: Please enter a valid numeric value for quantity.")
-        return validate_input_quantity()   
-
-
-
-    validate_record = True
-    total_records = {}
-    while validate_record:
-        decision = input("Do you want to record a sale? (yes/no): ").strip().lower()
-        if decision == 'no':
-            total_records_day = sum(details['total_sale'] for details in total_records.values())
-            print("---------------------------------------------------------")
-            print("Thank you for using the sales recording system.")
-            print("Here are the recorded sales:")
-            for product, details in total_records.items():
-                print(f"Product: {product}")
-                print(f"  Price: {details['price']}")
-                print(f"  Quantity: {details['quantity']}")
-                print(f"  Total Sale: {details['total_sale']}")
-            print("---------------------------------------------------------")
-            print(f"Total sales recorded for the day: {total_records_day}")
-            print("---------------------------------------------------------")
-            print("Exiting the sales recording system.")
-            
-            validate_record = False
-        elif decision == 'yes':
-            total_records.update(record_sales2())
-            print("Sales recorded successfully.")
-            print("---------------------------------------------------------")
-        else:
-            print("Invalid input. Please enter 'yes' or 'no'.")
-    return
+    validate = True
+    while validate:
+        try:
+            quantity = int(input("Enter the quantity sold: "))
+            if quantity <= 0:
+                print("ERROR: Quantity must be positive and non-zero. Please enter a valid quantity.")
+            else:
+                validate = False
+                
+        except ValueError:
+            print("ERROR: Please enter a valid numeric value for quantity.")   
+    return quantity
