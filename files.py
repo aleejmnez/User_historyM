@@ -1,11 +1,11 @@
 import csv
-
+#funciont to save inventory to csv file, it takes the inventory list, the path to save and an optional parameter to include header
 def save_csv(inventory, path, include_header=True):
     if not inventory:
         print("Cannot save: inventory is empty.")
         return
 
-    try:
+    try:#try catch error handling for file operations, it handles permission errors, IO errors and unexpected errors
         with open(path, mode='w', newline='', encoding='utf-8') as csvfile:
             writer = csv.writer(csvfile, delimiter=',')
             if include_header:
@@ -13,27 +13,25 @@ def save_csv(inventory, path, include_header=True):
 
             for product in inventory:
                 name = product.get('name_product', '').strip()
-                price = product.get('price', 0)
-                quantity = product.get('quantity', 0)
+                price = product.get('price', 0) #if price not found, default to 0
+                quantity = product.get('quantity', 0) #if quantity not found, default to 0
                 writer.writerow([name, price, quantity])
 
-        print(f"Inventory saved to: {path}")
+        print(f"Inventory saved to: {path}") #path is the filename or path where the inventory was saved successfully
 
-    except PermissionError:
+
+    except PermissionError: #Error for not have permission to writte to the file
         print(f"Error: permission denied to write to '{path}'. Check permissions.")
     except IOError as error:
-        print(f"I/O error writing file '{path}': {error}")
+        print(f"I/O error writing file '{path}': {error}") #error for input/output beacuse of disk issues, file system error
     except Exception as error:
-        print(f"Unexpected error saving CSV: {error}")
+        print(f"Unexpected error saving CSV: {error}")#error unexpectd for example dont have space in disk, or other issues
 
 
-def load_csv(path):
-    """
-    Loads a CSV file and returns a list of valid products.
-    Validates header, columns, types and skips invalid rows.
-    """
-    products = []
-    invalid_rows = 0
+def load_csv(path): #funcion to load the inventory from a csv file
+    
+    products = [] #list to store the products loaded from the csv file
+    invalid_rows = 0 #counter to keep rows invalid
     
     try:
         with open(path, mode='r', encoding='utf-8') as csvfile:
@@ -127,47 +125,38 @@ def load_csv(path):
         return None
 
 
-def ask_load_action():
-    """
-    Asks the user whether to overwrite or merge inventories.
-    Returns 'overwrite' or 'merge'.
-    """
-    action = input("\nOverwrite current inventory? (Y/N): ").strip().upper()
+def ask_load_action(): #function to ask overwrite or merge inventory
+   
+    action = input("\nOverwrite current inventory? (YES/NO): ").strip().upper()
 
-    if action == 'Y':
+    if action == 'YES':
         print("Action: Overwrite current inventory.")
         return 'overwrite'
 
-    if action == 'N':
+    if action == 'NO':
         print("Action: Merge inventories.")
-        print("Merge policy: if a product exists, sum quantity and update price.")
         return 'merge'
 
     print("Invalid option. Unrecognized value. Load operation will be cancelled.")
     return None
 
 
-def overwrite_inventory(current_inventory, new_inventory):
-    """
-    Replaces the current inventory with the loaded inventory.
-    """
+def overwrite_inventory(current_inventory, new_inventory): #function to overwrrite the current inventory
+    
     print("Current inventory overwritten with loaded data.")
     return [product.copy() for product in new_inventory]
 
 
-def merge_inventory(current_inventory, new_inventory):
-    """
-    Merges two inventories by product name (case-insensitive).
-    Policy: if exists, sum quantity and update price.
-    """
-    merged_count = 0
-    new_count = 0
+def merge_inventory(current_inventory, new_inventory):#function to merge the current inventory with the new inventory
+    
+    merged_count = 0 #counter to keep track of merged products
+    new_count = 0 #counter to keep track of new products
 
-    for new_product in new_inventory:
+    for new_product in new_inventory: #for each product in the new inventory, 
         new_name = new_product['name_product'].strip().lower()
         found = False
 
-        for current_product in current_inventory:
+        for current_product in current_inventory: #for each product in the current inventory, if the name matches the new product, merge them by updating the quantity and price
             if current_product['name_product'].strip().lower() == new_name:
                 previous_quantity = current_product['quantity']
                 previous_price = current_product['price']
@@ -175,18 +164,17 @@ def merge_inventory(current_inventory, new_inventory):
                 current_product['quantity'] += new_product['quantity']
                 current_product['price'] = new_product['price']
 
-                print(f"  ✓ '{new_product['name_product']}': quantity {previous_quantity} + {new_product['quantity']} = {current_product['quantity']}, price ${previous_price} → ${current_product['price']}")
+                print(f" New product added '{new_product['name_product']}': quantity {previous_quantity} + {new_product['quantity']} = {current_product['quantity']}, price ${previous_price} → ${current_product['price']}")
                 merged_count += 1
                 found = True
                 break
 
         if not found:
             current_inventory.append(new_product.copy())
-            print(f"  ✓ New: '{new_product['name_product']}' (${new_product['price']}, qty: {new_product['quantity']})")
+            print(f" New: '{new_product['name_product']}' (${new_product['price']}, qty: {new_product['quantity']})")
             new_count += 1
 
     return current_inventory, merged_count, new_count
 
 
-# Maintain compatibility with previous names if used elsewhere
-merge_inventories = merge_inventory
+merge_inventories = merge_inventory #

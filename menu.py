@@ -1,10 +1,10 @@
-from procesos import add_product, show_inventory, search_product, update_product, delete_product, calculate_statistics
-from archivos import save_csv, load_csv, ask_load_action, overwrite_inventory, merge_inventory
+from process import add_product, show_inventory, search_product, update_product, delete_product, calculate_statistics
+from files import save_csv, load_csv, ask_load_action, overwrite_inventory, merge_inventory
 
 
-def menu():
-    validate = True
-    inventory = []
+def menu(): 
+    validate = True #variable to control the menu loop
+    inventory = [] #list empty to save the products in the inventory
     while validate:
         print("----------------")
         print("Welcome to menu")
@@ -39,27 +39,27 @@ def menu():
             calculate_statistics(inventory)
 
         elif option == "7":
-            ruta = input("Enter filename (default: inventario.csv): ").strip()
-            if not ruta:
-                ruta = "inventario.csv"
-            save_csv(inventory, ruta)
+            path = input("Enter filename (default: inventory.csv): ").strip() 
+            if not path:
+                path = "inventory.csv"
+            save_csv(inventory, path)
 
         elif option == "8":
-            ruta = input("Enter filename to load (default: inventario.csv): ").strip()
-            if not ruta:
-                ruta = "inventario.csv"
+            path = input("Enter filename to load (default: inventory.csv): ").strip()
+            if not path:
+                path = "inventory.csv"
             
-            inventario_cargado = load_csv(ruta)
-            if inventario_cargado is not None:
+            inventory_load = load_csv(path)
+            if inventory_load is not None:
                 accion = ask_load_action()
                 if accion == 'overwrite':
-                    inventory = overwrite_inventory(inventory, inventario_cargado)
-                    print(f"Inventario reemplazado. Total de productos: {len(inventory)}\n")
+                    inventory = overwrite_inventory(inventory, inventory_load)
+                    print(f"Inventory overwritten. Total of products: {len(inventory)}\n")
                 elif accion == 'merge':
-                    print("Fusionando inventarios...")
-                    inventory, fusionados, nuevos = merge_inventory(inventory, inventario_cargado)
-                    print(f"\nResumen: {fusionados} productos actualizados, {nuevos} productos nuevos agregados.")
-                    print(f"Total de productos en inventario: {len(inventory)}\n")
+                    print("Merging inventory...")
+                    inventory, fusionados, nuevos = merge_inventory(inventory, inventory_load)
+                    print(f"\nSummary: {fusionados} products updated, {nuevos} new products added.")
+                    print(f"Total of products in inventory: {len(inventory)}\n")
 
         elif option == "9":
             print("Exit the system. Thank for using it")

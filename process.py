@@ -1,13 +1,14 @@
 from validate_options import validate_input_product_name, validate_input_price, validate_input_quantity, validate_product_name_unique
-#Procesos del menu 
-#agregar las caracteristicas del producto,nombre, cantidad y precio
-def add_product(inventory):
+#menu options. 
+
+#function to add product details: name, quantity, and price
+def add_product(inventory): 
     name_product = validate_input_product_name()
     
-    while not validate_product_name_unique(name_product, inventory):
+    while not validate_product_name_unique(name_product, inventory): #while the name is not unique, it will keep asking for new name. 
         print(f"ERROR: Product '{name_product}' already exists in the inventory. Please enter a different product name.")
-        
-    name_product = validate_input_product_name()
+        name_product = validate_input_product_name()  
+
     price = validate_input_price()
     quantity = validate_input_quantity()
 
@@ -19,15 +20,35 @@ def add_product(inventory):
 
     inventory.append(product)
 
-def calculate_statistics(inventory):
+def calculate_statistics(inventory): #funtion to calculate statistics of the inventory
     total=0
     summary_product = 0
     for product in inventory: 
        total+= product ['price'] * product ['quantity'] 
        summary_product += product ['quantity']
 
-    print(f"el total  de venta es: {total}")
-    print(f"la cantidad total de productos vendidos: {summary_product}")
+    expensive_product = inventory[0] 
+    highest_stock_product = inventory[0]
+    # Recorrer inventario
+    for product in inventory:
+        # Validar producto más caro
+        if product.get('price', 0) > expensive_product.get('price', 0):
+            expensive_product = product
+
+        # Validar mayor stock
+        if product.get('quantity', 0) > highest_stock_product.get('quantity', 0):
+            highest_stock_product = product
+
+    # Show results statistics
+    print("\n========== STATISTICS ==========")
+    
+    print(f"Total sales: {total}")
+    print(f"Total quantity of products sold: {summary_product}")
+    print(f"Most expensive product: {expensive_product.get('name_product')} - ${expensive_product.get('price')}")
+    print(f"Highest stock product: {highest_stock_product.get('name_product')} - {highest_stock_product.get('quantity')} units")
+    print("================================\n")
+
+
 
 def show_inventory(inventory):
     if not inventory:
@@ -48,7 +69,7 @@ def search_product(inventory):
         print("Inventory empty. Add products first.")
         return
 
-    query = input("Enter product name to search: ").strip().lower()
+    query = input("Enter product name to search: ").strip().lower() #query is key of name product to search in inventory
     if query == "":
         print("Search query cannot be empty.")
         return
@@ -66,7 +87,7 @@ def search_product(inventory):
     if not found:
         print(f"No product found with name '{query}'.")
 
-def update_product(inventory):
+def update_product(inventory): 
     found = False
     if not inventory:
         print("Inventory empty. Add products first.")
@@ -78,7 +99,7 @@ def update_product(inventory):
         return
 
     for product in inventory:
-        if product['name_product'].strip().lower() == query:
+        if product['name_product'].strip().lower() == query: #for used the query to search the product in inventory to update
             found = True
             print("---------------------------------------------------")
             print(f"Current product: {product['name_product']}")
@@ -113,13 +134,13 @@ def update_product(inventory):
     if not found:
         print(f"No product found with name '{query}'.")
 
-def delete_product(inventory):
+def delete_product(inventory): #function to delete a product from the inventory
     found = False
     if not inventory:
         print("Inventory empty. Add products first.")
         return
 
-    query = input("Enter the name of the product to delete: ").strip().lower()
+    query = input("Enter the name of the product to delete: ").strip().lower() #query is key of name product to search in inventory to delete
     if query == "":
         print("Product name cannot be empty.")
         return

@@ -2,7 +2,7 @@
 
 #definition of positive number 
 #this function control that numbers less than 0 are no placed. 
-def ask_number_postive(message):
+def ask_number_postive(message): 
     validate = True
     while validate:
         try:
@@ -25,15 +25,12 @@ def validate_empty_string(message):
         return validate_empty_string(message)
     return string
 
-################################################################################
-#estas funciones las debo crear 
-
-def validate_input_product_name():
+def validate_input_product_name(): #function to validate the product name input successfully
     user_input = input("Enter the name of the product: ").strip()
-    if not user_input: #Si No es valido el user input o si el usuario no guardo nada manda el print.
+    if not user_input: #if the user enter empty string, print error 
         print("ERROR: Product name cannot be empty. Please enter a valid product name.")
         return validate_input_product_name()
-    elif not user_input.replace(" ", "").isalpha():
+    elif not user_input.replace(" ", "").isalpha(): #only alphabetic characters
         print("ERROR: Product name can only contain letters. Please enter a valid product name.")
         return validate_input_product_name()
     else:
@@ -41,17 +38,17 @@ def validate_input_product_name():
 
 
 def validate_product_name_unique(product_name, inventory):
-    for product in inventory:
+    for product in inventory: #for to check if the product name already exists in the inventory, if exists print error
         if product['name_product'].strip().lower() == product_name.strip().lower():
             print(f"ERROR: Product '{product_name}' already exists in the inventory. Please enter a different product name.")
             return False
     return True
 
 
-def validate_input_price():
+def validate_input_price(): #function to validate the price input 
     try:
         price = float(input("Enter the price of the product: "))
-        if price <= 0:
+        if price <= 0: #not negative number and not zero
             print("ERROR: Price must be positive and non-zero. Please enter a valid price.")
             return validate_input_price()
         else:
@@ -61,11 +58,11 @@ def validate_input_price():
         return validate_input_price()
                    
 
-def validate_input_quantity():
+def validate_input_quantity(): #function to validate the quantity input
     validate = True
     while validate:
         try:
-            quantity = int(input("Enter the quantity sold: "))
+            quantity = int(input("Enter the quantity sold: ")) #not negative number and not zero
             if quantity <= 0:
                 print("ERROR: Quantity must be positive and non-zero. Please enter a valid quantity.")
             else:
