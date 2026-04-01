@@ -1,156 +1,152 @@
-from validate_options import validate_input_product_name, validate_input_price, validate_input_quantity, validate_product_name_unique
+from validate_options import validate_input_product_name, validate_input_price, validate_input_quantity, validate_id,ask_number_postive, validate_input_course
 #menu options. 
 
 #function to add product details: name, quantity, and price
-def add_product(inventory): 
-    name_product = validate_input_product_name()
+def add_name(inventory): 
+    id = ask_number_postive()
     
-    while not validate_product_name_unique(name_product, inventory): #while the name is not unique, it will keep asking for new name. 
-        print(f"ERROR: Product '{name_product}' already exists in the inventory. Please enter a different product name.")
-        name_product = validate_input_product_name()  
+    while not validate_id(id, inventory): #while the name is not unique, it will keep asking for new name. 
+        print(f"ERROR: The name '{id}' already exists in the system. Please enter a different name.")
+        id = ask_number_postive()
 
-    price = validate_input_price()
-    quantity = validate_input_quantity()
+    name=validate_input_product_name()
+    Age = validate_input_quantity()
+    course = validate_input_course()
+    Status = input("Add the status of the students: ")
 
-    product = {
-        "name_product": name_product, 
-        "price": price,
-        "quantity": quantity,
+    students = {
+        "Name_students": name, 
+        "Id": id,
+        "Age": Age,
+        "Course": course,
+        "Status": Status,
     }    
 
-    inventory.append(product)
-
-def calculate_statistics(inventory): #funtion to calculate statistics of the inventory
-    total=0
-    summary_product = 0
-    for product in inventory: 
-       total+= product ['price'] * product ['quantity'] 
-       summary_product += product ['quantity']
-
-    expensive_product = inventory[0] 
-    highest_stock_product = inventory[0]
-    # Recorrer inventario
-    for product in inventory:
-        # Validar producto más caro
-        if product.get('price', 0) > expensive_product.get('price', 0):
-            expensive_product = product
-
-        # Validar mayor stock
-        if product.get('quantity', 0) > highest_stock_product.get('quantity', 0):
-            highest_stock_product = product
-
-    # Show results statistics
-    print("\n========== STATISTICS ==========")
-    
-    print(f"Total sales: {total}")
-    print(f"Total quantity of products sold: {summary_product}")
-    print(f"Most expensive product: {expensive_product.get('name_product')} - ${expensive_product.get('price')}")
-    print(f"Highest stock product: {highest_stock_product.get('name_product')} - {highest_stock_product.get('quantity')} units")
-    print("================================\n")
+    inventory.append(students)
 
 
-
-def show_inventory(inventory):
+def show_students(inventory):
     if not inventory:
-        print ("Inventory empty")
+        print ("Information empty")
         return
+    
 
+    for students in inventory:
+        print("-----------------------------------------------------")
+        print("---------INFORMATION OF THE STUDENTS ADDED-----------")
+        print(f"The name of the students is: {students['Name_students']}")
+        print(f"The id of the students is: {students['Id']}")
+        print(f"The age of the students is: {students['Age']}")
+        print(f"The course of the students is: {students['Course']}")
+        print(f"The status of the students is: {students['Status']}")
+        print("-----------------------------------------------------")
 
-    for product in inventory:
-        print("---------------------------------------------------")
-        print(f"The name of the product is: {product['name_product']}")
-        print(f"The price of the product is: {product['price']}")
-        print(f"The quantity of the product is: {product['quantity']}")
-        print("---------------------------------------------------")
-
-def search_product(inventory):
+def search_students(inventory):
     found = False
     if not inventory:
-        print("Inventory empty. Add products first.")
+        print("Information empty. Add the information of the students .")
         return
 
-    query = input("Enter product name to search: ").strip().lower() #query is key of name product to search in inventory
+    query = int(input("Enter the id to search: "))#query is key of name product to search in inventory
     if query == "":
         print("Search query cannot be empty.")
         return
 
    
-    for product in inventory:
-        if product['name_product'].strip().lower() == query:
+    for students in inventory:
+        if students['Id'] == query:
             found = True
-            print("---------------------------------------------------")
-            print(f"The name of the product is: {product['name_product']}")
-            print(f"The price of the product is: {product['price']}")
-            print(f"The quantity of the product is: {product['quantity']}")
-            print("---------------------------------------------------")
+        print("---------SEARCH INFORMATION OF THE STUDENT-----------")
+        print(f"The name of the students is: {students['Name_students']}")
+        print(f"The id of the students is: {students['Id']}")
+        print(f"The age of the students is: {students['Age']}")
+        print(f"The course of the students is: {students['Course']}")
+        print(f"The status of the students is: {students['Status']}")
+        print("-----------------------------------------------------")
 
     if not found:
-        print(f"No product found with name '{query}'.")
+        print(f"No information found with id '{query}'.")
 
-def update_product(inventory): 
+def update_students(inventory): 
     found = False
     if not inventory:
-        print("Inventory empty. Add products first.")
+        print("Information empty. Add the information of the students .")
         return
 
-    query = input("Enter the name of the product to update: ").strip().lower()
+    query = int(input("Enter the id to search: "))#query is key of name product to search in inventory
     if query == "":
-        print("Product name cannot be empty.")
+        print("Search query cannot be empty.")
         return
 
-    for product in inventory:
-        if product['name_product'].strip().lower() == query: #for used the query to search the product in inventory to update
+    for students in inventory:
+        if students['Id'] == query: #for used the query to search the product in inventory to update
             found = True
-            print("---------------------------------------------------")
-            print(f"Current product: {product['name_product']}")
-            print(f"Current price: {product['price']}")
-            print(f"Current quantity: {product['quantity']}")
-            print("---------------------------------------------------")
+        print("---------SEARCH INFORMATION OF THE STUDENT-----------")
+        print(f"The name of the students is: {students['Name_students']}")
+        print(f"The id of the students is: {students['Id']}")
+        print(f"The age of the students is: {students['Age']}")
+        print(f"The course of the students is: {students['Course']}")
+        print(f"The status of the students is: {students['Status']}")
+        print("-----------------------------------------------------")
             
-            print("\nWhat do you want to update?")
-            print("1- Price")
-            print("2- Quantity")
+        print("\nWhat do you want to update?")
+        print("1- Name")
+        print("2- Age")
+        print("3- Course")
+        print("4- Status")
             
-            option = input("Please choose an option: ")
+        option = input("Please choose an option 1-4: ")
             
-            if option == "1":
-                product['price'] = validate_input_price()
-                print("Price updated successfully.")
+        if option == "1":
+                students['Name'] = validate_input_product_name()
+                print("Name updated successfully.")
                 
-            elif option == "2":
-                product['quantity'] = validate_input_quantity()
-                print("Quantity updated successfully.")
+        elif option == "2":
+                students['Age'] = validate_input_quantity()
+                print("Age updated successfully.")
+
+        elif option == "3":
+            students ['Course'] = validate_input_course()
+            print("Course updated successfully")
+
+        elif option == "4":
+            students ['Status']
+            print("Status updated sucessfully")    
                 
-            else:
-                print("Invalid option.")
+        else:
+                print("Invalid option. try again")
             
-            print("---------------------------------------------------")
-            print(f"Updated product: {product['name_product']}")
-            print(f"New price: {product['price']}")
-            print(f"New quantity: {product['quantity']}")
-            print("---------------------------------------------------")
-            return
+        print("----------------UPDATED INFORMATION----------------")
+        print(f"Updated Name students: {students['Name_students']}")
+        print(f"Update Age: {students['Age']}")
+        print(f"Update Course: ")
+        print(f"Updated status: {students['Status']}")
+        print("---------------------------------------------------")
+        return
 
     if not found:
-        print(f"No product found with name '{query}'.")
+        print(f"Not found the id '{query}'.")
 
-def delete_product(inventory): #function to delete a product from the inventory
+def delete_students(inventory): #function to delete a product from the inventory
     found = False
-    if not inventory:
-        print("Inventory empty. Add products first.")
-        return
+    try:
 
-    query = input("Enter the name of the product to delete: ").strip().lower() #query is key of name product to search in inventory to delete
-    if query == "":
-        print("Product name cannot be empty.")
-        return
-
-    for product in inventory:
-        if product['name_product'].strip().lower() == query:
-            found = True
-            inventory.remove(product)
-            print(f"Product '{query}' deleted successfully.")
+        if not inventory:
+            print("Information empty. Add information first.")
             return
 
-    if not found:
-        print(f"No product found with name '{query}'.")
+        query = int(input("Enter the Id of the product to delete: ")) #query is key of name product to search in inventory to delete
+        if query == "":
+            print("Product name cannot be empty.")
+            return
+
+        for students in inventory:
+            if students['Id'] == query:
+                found = True
+                inventory.remove(students)
+                print(f"The information '{query}' deleted successfully.")
+                return
+    except KeyboardInterrupt:        
+
+        if not found:
+            print(f"No found the information '{query}'.")
